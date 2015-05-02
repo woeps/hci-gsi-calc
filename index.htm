@@ -23,6 +23,9 @@
             <li>Minimal amount of points to be positive: <input type="text" value="" id="adv_minPoints" name="adv_minPoints"></li>
             <li>Forced delay between hand overs (D): <input type="text" value="" id="adv_delay" name="adv_delay"></li>
             <li>Last possible hand over (D.M.YYYY): <input type="text" value="" id="adv_deadlineD" name="adv_deadlineD"> . <input type="text" value="" id="adv_deadlineM" name="adv_deadlineM"> . <input type="text" value="" id="adv_deadlineY" name="adv_deadlineY" class="mediumInput"></li>
+            <li>&nbsp;</li>
+            <li>Temporary different delay between hand overs (D): <input type="text" value="" id="adv_tmpDelay" name="adv_tmpDelay"></li>
+            <li>Temporary delay until (D.M.YYYY): <input type="text" value="" id="adv_tmpDeadlineD" name="adv_tmpDeadlineD"> . <input type="text" value="" id="adv_tmpDeadlineM" name="adv_tmpDeadlineM"> . <input type="text" value="" id="adv_tmpDeadlineY" name="adv_tmpDeadlineY" class="mediumInput"></li>
         </ul>
 </div>
 </div>
@@ -48,7 +51,8 @@ $(document).ready(function(){
     setConfig();
 
 //HANDLE-EVENTS
-    $('#showAdvancedForm').click(function(){
+    $('#showAdvancedForm').click(function(event){
+        event.preventDefault();
         $('#advancedForm').toggle('slow');
         });
     $('#calc').click(function(){
@@ -64,6 +68,8 @@ function calc() {
     //nextDate.setDate(nextDate.getDate()+1);
     var lastDate = new Date($('#adv_deadlineM').val()+'/'+$('#adv_deadlineD').val()+'/'+$('#adv_deadlineY').val());
     var delay = $('#adv_delay').val();
+    var tmpDate = new Date($('#adv_tmpDeadlineM').val()+'/'+$('#adv_tmpDeadlineD').val()+'/'+$('#adv_tmpDeadlineY').val());
+    var tmpDelay = $('#adv_tmpDelay').val();
     var minP = $('#adv_minPoints').val();
     var curP = $('#f_curPoints').val();
 
@@ -72,15 +78,26 @@ function calc() {
         var daysLeft = timeLeft/dayMs;
         op.html('<p title="counting days from next possible hand over to deadline">Days left for hand overs: ' + daysLeft);
 
-        var handOversLeft = Math.floor(daysLeft/delay)+1
-        op.append('<p title="max amount of hand overs if time is used as best as possible">Possible hand overs: ' + handOversLeft + '</p>');
+        if(tmpDate.getTime()>0 & tmpDelay>0) {
+            var tmpDaysLeft = (Math.floor(tmpDate.getTime() - new Date((nextDate.getMonth()+1)+'/'+nextDate.getDate()+'/'+nextDate.getFullYear()).getTime())) / dayMs;
+            op.append('<p title="counting days from next possible hand over to end of temporary delay">Days left till end of temporary delay: ' + tmpDaysLeft);
+            }
+
+        var handOversLeft = Math.floor(daysLeft/delay)+1;
+        if(tmpDate.getTime()>0 && tmpDelay>0 && tmpDaysLeft>=0) {
+            var tmpHandOvers = Math.floor(tmpDaysLeft/tmpDelay)+1;
+            var defHandOvers = Math.floor((daysLeft - (tmpHandOvers * tmpDelay))/delay);
+            var handOversLeft = tmpHandOvers + defHandOvers + 1;
+            console.log('tmp');
+            }
+        op.append('<p title="max amount of hand overs if time is used as best as possible">Possible hand overs: ' + (handOversLeft) + '</p>');
 
         var minPointsToGet = Math.ceil((minP - curP)/handOversLeft);
         op.append('<p title="points to reach on each hand over at minimum (in average)">Minimum points for each hand over: ' + minPointsToGet + '</p>');
     
-        for(i=0;nextDate.getTime()<lastDate.getTime();i++) {
+        for(i=0;nextDate.getTime()<=lastDate.getTime();i++) {
             op.append('<p title="date of a possible hand over if time is used as best as possible">Possible hand over #'+i+': ' + nextDate.toLocaleDateString() + '</p>');
-            nextDate = nextHandOver(nextDate, delay);
+            nextDate = nextHandOver(nextDate, delay, tmpDate, tmpDelay);
             }
         }
     else {
@@ -88,8 +105,15 @@ function calc() {
         }
     }
 
-function nextHandOver(nextDate, delay) {
-    nextDate.setTime(nextDate.getTime() + (delay*dayMs));
+function nextHandOver(nextDate, delay, tmpDate, tmpDelay) {
+    var nextTime = nextDate.getTime() + (delay*dayMs);
+    if(tmpDate.getTime()>0 && tmpDelay>0 && nextDate.getTime()<=tmpDate.getTime()) {
+        var nextTmpTime = nextDate.getTime() + (tmpDelay*dayMs);
+        //if(nextTmpTime <= tmpDate.getTime()) {
+            nextTime = nextTmpTime;
+            //}
+        }
+    nextDate.setTime(nextTime);
     return nextDate;
     }
 
@@ -104,6 +128,12 @@ function setConfig() {
     $('#adv_deadlineD').val(advDeadline.getDate());
     $('#adv_deadlineM').val(advDeadline.getMonth()+1);
     $('#adv_deadlineY').val(advDeadline.getFullYear());
+
+    $('#adv_tmpDelay').val('7');
+    $('#adv_tmpDeadlineD').val('4');
+    $('#adv_tmpDeadlineM').val('5');
+    $('#adv_tmpDeadlineY').val('2015');
+
     }
 });
 </script>
