@@ -10,6 +10,10 @@ body {
     font-family: Sans-Serif, Serif;
     margin: 10px;
     font-size: 14px;
+    text-align: center;
+    &>div {
+        text-align: left;
+        }
     }
 
 input {
@@ -29,22 +33,14 @@ h1 {
     color: lighten($font-color, 20%);
     }
 
-#showAdvancedForm {
-    font-size: 12px;
-    color: darken($font-color, 20%);
-    }
-
-#showAdvancedForm:hover {
-    color: $font-color;
-    }
-
-#advancedForm {
-    display: none;
-    //display: block;
-    padding: 10px;
-    margin: 5px;
-    border: dotted 2px lighten($base-color, 20%);
-    width: auto;
+.mainContainer {
+    //float: left;
+    display: block;
+    margin: 0px auto;
+    text-align: center;
+    div {
+        text-align: left;
+        }
     }
 
 .nolist {
@@ -65,21 +61,55 @@ h1 {
     width: $input-width*3;
     }
 
-.left {
-    float: left;
-    display: block;
+.box {
+    //float: left;
+    //display: block;
+    display: inline-block;
+    vertical-align: top;
     margin: 10px;
     padding: 10px;
     background-color: lighten($base-color, 10%);
     border: 1px groove lighten($base-color, 20%);
     @include border-radius(6px);
     @include box-shadow(#000 0px 4px 10px);
+    z-index: 99;
     }
 
 #opContainer p {
     cursor: crosshair;
     }
 
-.clear {
-    clear: both;
+#showAdvancedForm {
+    font-size: 12px;
+    color: darken($font-color, 20%);
+    }
+
+#showAdvancedForm:hover {
+    color: $font-color;
+    }
+
+#advancedForm {
+    display: none;
+    //display: block;
+    padding: 10px;
+    margin: 5px;
+    border: dotted 2px lighten($base-color, 20%);
+    width: auto;
+    }
+
+#footer {
+    &, & a {
+        color: lighten($base-color, 20%);
+        }
+    position: fixed;
+    bottom: 0px;
+    left: 0px;
+    width: 100%;
+    text-align: center;
+    font-size: 10px;
+    padding: 4px;
+    margin: 0px;
+    background-color: darken($base-color, 10%);
+    z-index: 0;
+    @include box-shadow(#000 0px 0px 20px);
     }
