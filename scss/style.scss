@@ -1,0 +1,85 @@
+@import "settings";
+@import "normalize";
+
+@import "compass/css3/box-shadow";
+@import "compass/css3/border-radius";
+
+body {
+    background-color: $base-color;
+    color: $font-color;
+    font-family: Sans-Serif, Serif;
+    margin: 10px;
+    font-size: 14px;
+    }
+
+input {
+    width: $input-width;
+    color: $font-color;
+    background-color: transparent;
+    border: none;
+    border-bottom: 1px solid darken($font-color, 30%);
+    text-align: center;
+    }
+
+button {
+    color: $base-color;
+    }
+
+h1 {
+    color: lighten($font-color, 20%);
+    }
+
+#showAdvancedForm {
+    font-size: 12px;
+    color: darken($font-color, 20%);
+    }
+
+#showAdvancedForm:hover {
+    color: $font-color;
+    }
+
+#advancedForm {
+    display: none;
+    //display: block;
+    padding: 10px;
+    margin: 5px;
+    border: dotted 2px lighten($base-color, 20%);
+    width: auto;
+    }
+
+.nolist {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+
+    li {
+        margin-bottom: 5px;
+        }
+    }
+
+.mediumInput {
+    width: $input-width*2;
+    }
+    
+.longInput {
+    width: $input-width*3;
+    }
+
+.left {
+    float: left;
+    display: block;
+    margin: 10px;
+    padding: 10px;
+    background-color: lighten($base-color, 10%);
+    border: 1px groove lighten($base-color, 20%);
+    @include border-radius(6px);
+    @include box-shadow(#000 0px 4px 10px);
+    }
+
+#opContainer p {
+    cursor: crosshair;
+    }
+
+.clear {
+    clear: both;
+    }

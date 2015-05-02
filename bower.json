@@ -1,0 +1,20 @@
+{
+  "name": "hci&gsi-calc",
+  "version": "1.0",
+  "authors": [
+    "Christoph Wanasek <christoph.wanase@hotmail.com>"
+  ],
+  "description": "Calculator for points and hand overs in hci/gsi",
+  "license": "MIT",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "jquery": "1.11"
+  }
+}

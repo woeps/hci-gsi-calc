@@ -1,0 +1,111 @@
+<html>
+<head>
+    <title>GSI/HCI-CALC</title>
+    <script src="bower_components/jquery/dist/jquery.min.js"></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<h1>GSI- & HCI- CALCULATOR</h1>
+<noscript>This Calculator needs JavaScript to be activated.</noscript>
+<div class="left" id="ipContainer">
+    <ul class="nolist">
+        <li>Current Points: <input id="f_curPoints" type="text" value="0" name="f_curPoins"></li>
+        <li>Next possible hand over (D.M.YYYY): <input id="f_deadlineD" type="text" value="" name="f_deadlineD"> . <input id="f_deadlineM" type="text" value="" name="f_deadlineM"> . <input id="f_deadlineY" type="text" value="" name="f_deadlineY" class="mediumInput"></li>
+    </ul>
+    <br>
+    <div align="center">
+        <button id="calc">Calculate</button>
+    </div>
+    <br>
+    <a href="#" id="showAdvancedForm">Advanced Settings</a><br>
+    <div id="advancedForm">
+        <ul class="nolist">
+            <li>Minimal amount of points to be positive: <input type="text" value="" id="adv_minPoints" name="adv_minPoints"></li>
+            <li>Forced delay between hand overs (D): <input type="text" value="" id="adv_delay" name="adv_delay"></li>
+            <li>Last possible hand over (D.M.YYYY): <input type="text" value="" id="adv_deadlineD" name="adv_deadlineD"> . <input type="text" value="" id="adv_deadlineM" name="adv_deadlineM"> . <input type="text" value="" id="adv_deadlineY" name="adv_deadlineY" class="mediumInput"></li>
+        </ul>
+</div>
+</div>
+<div class="left" id="opContainer">
+    Nothing calculated yet.
+</div>
+<br>
+<div class="clear">
+</div>
+<script type="text/javascript">
+//CALC-CONFIG
+var advDeadline = new Date('06/30/2015');
+var advMinPoints = 60;
+var advDelay = 11;
+
+//HELPER-VARS
+var now = new Date(Date.now());
+var dayMs = 1000*60*60*24;
+
+$(document).ready(function(){
+//RUN-CALC
+    console.log('READY');
+    setConfig();
+
+//HANDLE-EVENTS
+    $('#showAdvancedForm').click(function(){
+        $('#advancedForm').toggle('slow');
+        });
+    $('#calc').click(function(){
+        calc();
+        });
+    $('input').keyup(function(){
+        calc();
+        });
+
+function calc() {
+    var op = $('#opContainer');
+    var nextDate = new Date($('#f_deadlineM').val()+'/'+$('#f_deadlineD').val()+'/'+$('#f_deadlineY').val());
+    //nextDate.setDate(nextDate.getDate()+1);
+    var lastDate = new Date($('#adv_deadlineM').val()+'/'+$('#adv_deadlineD').val()+'/'+$('#adv_deadlineY').val());
+    var delay = $('#adv_delay').val();
+    var minP = $('#adv_minPoints').val();
+    var curP = $('#f_curPoints').val();
+
+    if(delay>0) {
+        var timeLeft = lastDate.getTime() - nextDate.getTime();
+        var daysLeft = timeLeft/dayMs;
+        op.html('<p title="counting days from next possible hand over to deadline">Days left for hand overs: ' + daysLeft);
+
+        var handOversLeft = Math.floor(daysLeft/delay)+1
+        op.append('<p title="max amount of hand overs if time is used as best as possible">Possible hand overs: ' + handOversLeft + '</p>');
+
+        var minPointsToGet = Math.ceil((minP - curP)/handOversLeft);
+        op.append('<p title="points to reach on each hand over at minimum (in average)">Minimum points for each hand over: ' + minPointsToGet + '</p>');
+    
+        for(i=0;nextDate.getTime()<lastDate.getTime();i++) {
+            op.append('<p title="date of a possible hand over if time is used as best as possible">Possible hand over #'+i+': ' + nextDate.toLocaleDateString() + '</p>');
+            nextDate = nextHandOver(nextDate, delay);
+            }
+        }
+    else {
+        op.html('<p title="set a valid amount of days in Advanced Settings -> Delay">Delay not set properly!</p>');
+        }
+    }
+
+function nextHandOver(nextDate, delay) {
+    nextDate.setTime(nextDate.getTime() + (delay*dayMs));
+    return nextDate;
+    }
+
+function setConfig() {
+    $('#f_deadlineD').val(now.getDate());
+    $('#f_deadlineM').val(now.getMonth()+1);
+    $('#f_deadlineY').val(now.getFullYear());
+
+    $('#adv_minPoints').val(advMinPoints);
+    $('#adv_delay').val(advDelay);
+
+    $('#adv_deadlineD').val(advDeadline.getDate());
+    $('#adv_deadlineM').val(advDeadline.getMonth()+1);
+    $('#adv_deadlineY').val(advDeadline.getFullYear());
+    }
+});
+</script>
+</body>
+</html>
