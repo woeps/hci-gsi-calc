@@ -76,11 +76,11 @@ function calc() {
     if(delay>0) {
         var timeLeft = lastDate.getTime() - nextDate.getTime();
         var daysLeft = timeLeft/dayMs;
-        op.html('<p title="counting days from next possible hand over to deadline">Days left for hand overs: ' + daysLeft);
+        op.html('<p title="counting days from next possible hand in to deadline">Days left for hand ins: ' + daysLeft);
 
         if(tmpDate.getTime()>0 & tmpDelay>0) {
             var tmpDaysLeft = (Math.floor(tmpDate.getTime() - new Date((nextDate.getMonth()+1)+'/'+nextDate.getDate()+'/'+nextDate.getFullYear()).getTime())) / dayMs;
-            op.append('<p title="counting days from next possible hand over to end of temporary delay">Days left till end of temporary delay: ' + tmpDaysLeft);
+            op.append('<p title="counting days from next possible hand in to end of temporary delay">Days left till end of temporary delay: ' + tmpDaysLeft);
             }
 
         var handOversLeft = Math.floor(daysLeft/delay)+1;
@@ -90,13 +90,13 @@ function calc() {
             var handOversLeft = tmpHandOvers + defHandOvers + 1;
             console.log('tmp');
             }
-        op.append('<p title="max amount of hand overs if time is used as best as possible">Possible hand overs: ' + (handOversLeft) + '</p>');
+        op.append('<p title="max amount of hand ins if time is used as best as possible">Possible hand ins: ' + (handOversLeft) + '</p>');
 
         var minPointsToGet = Math.ceil((minP - curP)/handOversLeft);
-        op.append('<p title="points to reach on each hand over at minimum (in average)">Minimum points for each hand over: ' + minPointsToGet + '</p>');
+        op.append('<p title="points to reach on each hand in at minimum (in average)">Minimum points for each hand in: ' + minPointsToGet + '</p>');
     
         for(i=0;nextDate.getTime()<=lastDate.getTime();i++) {
-            op.append('<p title="date of a possible hand over if time is used as best as possible">Possible hand over #'+i+': ' + nextDate.toLocaleDateString() + '</p>');
+            op.append('<p title="date of a possible hand in if time is used as best as possible">Possible hand in #'+i+': ' + nextDate.toLocaleDateString() + '</p>');
             nextDate = nextHandOver(nextDate, delay, tmpDate, tmpDelay);
             }
         }
