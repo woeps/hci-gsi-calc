@@ -84,7 +84,7 @@ function calc() {
             }
 
         var handOversLeft = Math.floor(daysLeft/delay)+1;
-        if(tmpDate.getTime()>0 && tmpDelay>0 && tmpDaysLeft>=0) {
+        if(tmpDate.getTime()>0 && tmpDelay>0 && tmpDaysLeft>0) {
             var tmpHandOvers = Math.floor(tmpDaysLeft/tmpDelay)+1;
             var defHandOvers = Math.floor((daysLeft - (tmpHandOvers * tmpDelay))/delay);
             var handOversLeft = tmpHandOvers + defHandOvers + 1;
@@ -107,7 +107,7 @@ function calc() {
 
 function nextHandOver(nextDate, delay, tmpDate, tmpDelay) {
     var nextTime = nextDate.getTime() + (delay*dayMs);
-    if(tmpDate.getTime()>0 && tmpDelay>0 && nextDate.getTime()<=tmpDate.getTime()) {
+    if(tmpDate.getTime()>0 && tmpDelay>0 && nextDate.getTime()<tmpDate.getTime()) {
         var nextTmpTime = nextDate.getTime() + (tmpDelay*dayMs);
         //if(nextTmpTime <= tmpDate.getTime()) {
             nextTime = nextTmpTime;
