@@ -113,3 +113,29 @@ h1 {
     z-index: 0;
     @include box-shadow(#000 0px 0px 20px);
     }
+
+@media only screen and (-Webkit-min-device-pixel-ratio: 1.5),
+only screen and (-moz-min-device-pixel-ratio: 1.5),
+only screen and (-o-min-device-pixel-ratio: 3/2),
+only screen and (min-device-pixel-ratio: 1.5) {
+    body {
+        font-size: 28px !important;
+        }
+
+    .box {
+        width: 95%;
+        text-align: center;
+        }
+
+    #footer {
+        font-size: 20px;
+        }
+
+    #showAdvancedForm {
+        font-size: 26px;
+        }
+
+    #gitLink {
+        width: 200px;
+        }
+    }
